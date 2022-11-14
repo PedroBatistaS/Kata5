@@ -1,5 +1,6 @@
 package kata5p1;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ public class Kata5P1 {
         connect();
         SelectApp app = new SelectApp();
         app.selectAll();
+        createMailTable();
     }
     
     private static void connect() {
@@ -31,5 +33,22 @@ public class Kata5P1 {
                 System.out.println(ex.getMessage());
             }
         }
-    }    
+    }
+    
+    public static void createMailTable() {
+        // Cadena de conexión SQLite
+        String url = "jdbc:sqlite:mail.db";
+        // Instrucción SQL para crear nueva tabla
+        String sql = "CREATE TABLE IF NOT EXISTS EMAIL (\n"
+                    + " id integer PRIMARY KEY AUTOINCREMENT,\n"
+                    + " mail text NOT NULL);";
+        try (Connection conn = DriverManager.getConnection(url);
+        Statement stmt = conn.createStatement()) {
+            // Se crea la nueva tabla
+            stmt.execute(sql);
+            System.out.println("Tabla creada");
+        } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+}
 }
